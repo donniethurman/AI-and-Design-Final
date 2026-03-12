@@ -1,0 +1,369 @@
+/* =========================================================================
+   VARIABLES & GLOBALS
+   ========================================================================= */
+:root {
+    --bg-color: #f5f5f7;
+    --text-primary: #1d1d1f;
+    --text-secondary: #86868b;
+    --skeptical-color: #E06C9F; /* Pink/Purple */
+    --supportive-color: #6E9887; /* Green */
+    --bubble-radius: 24px;
+    --max-content-width: 700px;
+    
+    font-family: 'Inter', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* =========================================================================
+   HERO SECTION
+   ========================================================================= */
+.hero-section {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    text-align: center;
+}
+
+.hero-graphic {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    margin-bottom: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hero-bubble {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0.9;
+    mix-blend-mode: multiply;
+    transition: transform 1s ease-out;
+}
+
+.bubble-skeptical {
+    background-color: var(--skeptical-color);
+    color: white;
+    transform: translateX(-40px) translateY(-20px);
+    border-bottom-left-radius: 10%;
+}
+
+.bubble-supportive {
+    background-color: var(--supportive-color);
+    color: white;
+    transform: translateX(40px) translateY(20px);
+    border-bottom-right-radius: 10%;
+}
+
+.fragment {
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 4px 0;
+    opacity: 0.8;
+}
+
+.hero-text h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    margin-bottom: 1rem;
+    line-height: 1.1;
+}
+
+.hero-text .subtitle {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+/* =========================================================================
+   CHAT CONTAINER
+   ========================================================================= */
+.chat-container {
+    max-width: var(--max-content-width);
+    margin: 0 auto;
+    padding: 4rem 1.5rem;
+}
+
+.chat-thread {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+.message-wrapper {
+    display: flex;
+    flex-direction: column;
+    max-width: 80%;
+    opacity: 0; /* Hidden by default, JS reveals */
+    transform: translateY(30px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.message-wrapper.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.message-wrapper.left {
+    align-self: flex-start;
+    align-items: flex-start;
+}
+
+.message-wrapper.right {
+    align-self: flex-end;
+    align-items: flex-end;
+}
+
+.message-info {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+}
+
+.chat-bubble {
+    padding: 1.25rem 1.5rem;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    position: relative;
+    line-height: 1.5;
+}
+
+.left .chat-bubble {
+    border-radius: var(--bubble-radius) var(--bubble-radius) var(--bubble-radius) 4px;
+}
+
+.right .chat-bubble {
+    border-radius: var(--bubble-radius) var(--bubble-radius) 4px var(--bubble-radius);
+}
+
+.skeletal-bubble {
+    background-color: var(--skeptical-color);
+    color: white;
+}
+
+.supportive-bubble {
+    background-color: var(--supportive-color);
+    color: white;
+}
+
+/* =========================================================================
+   HIGHLIGHTS
+   ========================================================================= */
+.highlight {
+    font-weight: 700;
+    position: relative;
+    display: inline-block;
+}
+
+.highlight::after {
+    content: '';
+    position: absolute;
+    bottom: 2px;
+    left: 0;
+    width: 0;
+    height: 4px;
+    background-color: rgba(255, 255, 255, 0.4);
+    transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.message-wrapper.visible .highlight::after {
+    width: 100%;
+    transition-delay: 0.5s;
+}
+
+/* =========================================================================
+   TYPING INDICATOR
+   ========================================================================= */
+.typing-indicator {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 1rem 1.5rem;
+    background-color: #e5e5ea;
+    border-radius: var(--bubble-radius);
+    width: fit-content;
+    border-bottom-left-radius: 4px;
+    margin-bottom: 1rem;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.typing-indicator span {
+    width: 8px;
+    height: 8px;
+    background-color: #8e8e93;
+    border-radius: 50%;
+    animation: bounce 1.4s infinite ease-in-out both;
+}
+
+.typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+.typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+.typing-indicator span:nth-child(3) { animation-delay: 0s; }
+
+@keyframes bounce {
+    0%, 80%, 100% { transform: scale(0); }
+    40% { transform: scale(1); }
+}
+
+/* =========================================================================
+   UNITY SECTION
+   ========================================================================= */
+.unity-section {
+    margin-top: 8rem;
+    margin-bottom: 6rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 1s ease-out;
+}
+
+.unity-section.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.unity-graphic {
+    position: relative;
+    width: 250px;
+    height: 180px;
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Using a gradient to show blending of colors */
+.merged-bubble {
+    width: 200px;
+    height: 150px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--skeptical-color) 0%, var(--supportive-color) 100%);
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    transition: transform 1.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.merged-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    border-top: 25px solid var(--supportive-color);
+}
+
+.final-message {
+    z-index: 10;
+    background: white;
+    padding: 2rem;
+    border-radius: var(--bubble-radius);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+    max-width: 500px;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    transform: translateY(-40px);
+}
+
+/* =========================================================================
+   FOOTER
+   ========================================================================= */
+.site-footer {
+    text-align: center;
+    padding: 4rem 2rem;
+    border-top: 1px solid rgba(0,0,0,0.05);
+}
+
+.sources-link {
+    display: inline-block;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.sources-link:hover {
+    color: var(--text-primary);
+}
+
+/* =========================================================================
+   SOURCES PAGE
+   ========================================================================= */
+.sources-container {
+    max-width: var(--max-content-width);
+    margin: 4rem auto;
+    padding: 0 1.5rem;
+}
+
+.sources-container h1 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+}
+
+.source-item {
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.source-item h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.source-item p {
+    color: var(--text-secondary);
+}
+
+.nav-link {
+    display: inline-block;
+    margin-bottom: 3rem;
+    color: var(--supportive-color);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.nav-link:hover {
+    text-decoration: underline;
+}
